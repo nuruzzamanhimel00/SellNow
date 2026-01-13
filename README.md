@@ -52,4 +52,4 @@ Installing Composer dependencies and setting up the development environment for 
 
 3. Need to add success.html.twig for after completing success.html.twig
 
-4. schema.sql file code updated 
+4. schema.sql file's schema updated 
