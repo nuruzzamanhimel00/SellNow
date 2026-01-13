@@ -51,3 +51,5 @@ Installing Composer dependencies and setting up the development environment for 
 2. Add .gitignore in this project
 
 3. Need to add success.html.twig for after completing success.html.twig
+
+4. schema.sql file code updated 
