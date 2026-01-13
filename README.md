@@ -410,6 +410,21 @@ The result is a codebase that is:
 
 ---
 
+🔧 SQLite Driver Enable
+Step 1: PHP.ini তে SQLite Extension Enable
+   - ✅  run: php --ini
+
+Step 2: SQLite extension enable
+   - ✅ php -m | Select-String -Pattern "sqlite"
+Step 3: SQLite extension not loaded. We have to  php.ini file edit for enable 
+   - ✅  Get-Content "D:\laragon\bin\php\php-8.3.19-Win32-vs16-x64\php.ini" | Select-String -Pattern "extension=pdo_sqlite"
+   or we have to go through php.ini file and remove (;) before extension=pdo_sqlite
+Step 4: we have to enable sqlite3 into the php.ini file
+   - ✅ (Get-Content "D:\laragon\bin\php\php-8.3.19-Win32-vs16-x64\php.ini") -replace ';extension=sqlite3', 'extension=sqlite3' | Set-Content "D:\laragon\bin\php\php-8.3.19-Win32-vs16-x64\php.ini"
+Step 5: we need to restart server
+   - ✅  taskkill /F /FI "WINDOWTITLE eq php*"
+   - ✅ php -m | Select-String -Pattern "pdo_sqlite"
+   - ✅ php -S localhost:8000 -t public
 ## 👨‍💻 Author
 
 Refactored with ❤️ to demonstrate mastery of software engineering principles.
