@@ -43,3 +43,7 @@ A platform where:
 - `database/`: Schema and SQLite file.
 
 Good luck!
+
+
+- Setting Up Project Dependencies
+Installing Composer dependencies and setting up the development environment for the SellNow project.

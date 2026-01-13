@@ -1,0 +1,36 @@
+# Vendor directory
+/vendor/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+/storage/logs/*.log
+*.log
+
+# Uploaded files
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Composer
+composer.phar
+composer.lock
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Cache
+/storage/cache/*
+!/storage/cache/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*~
