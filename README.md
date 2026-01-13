@@ -44,6 +44,10 @@ A platform where:
 
 Good luck!
 
-
-- Setting Up Project Dependencies
+Audit: 
+1. Setting Up Project Dependencies
 Installing Composer dependencies and setting up the development environment for the SellNow project.
+
+2. Add .gitignore in this project
+
+3. Need to add success.html.twig for after completing success.html.twig
