@@ -62,3 +62,4 @@ Installing Composer dependencies and setting up the development environment for 
    - Creating Validation layer and Service layer (AuthService, ProductService)
    - Creating Payment Gateway abstraction and refactoring controllers
    - Creating service configuration, routes, and refactoring controllers
+   - Updating front controller and normalizing database schema
