@@ -28,11 +28,22 @@ A platform where:
 3. **Run Server**:
    Use PHP built-in server:
    ```bash
-   php -S localhost:8000 -t public
+   php -S localhost:8001 -t public
    ```
 
-4. **Access**:
-   http://localhost:8000
+4. **Environment Setup**:
+   Copy `.env.example` to `.env` (already done):
+   ```bash
+   cp .env.example .env
+   ```
+
+5. **Access**:
+   http://localhost:8001
+
+6. **Test Login**:
+   A test user has been created:
+   - Email: `hello@app.com`
+   - Password: `12345678`
 
 
 ## Directory Structure
@@ -44,7 +55,59 @@ A platform where:
 
 Good luck!
 
-Audit: 
+## Recent Fixes & Enhancements
+
+### Authentication & Security Fixes (Latest)
+
+#### 1. **Fixed Login/Registration Issue**
+**Problem**: Users could register but login failed immediately after registration.
+
+**Root Causes Identified**:
+- Missing `.env` file (application expected environment configuration)
+- CSRF tokens not present in login/register forms
+- AuthController was using old plain-text password comparison instead of bcrypt
+- Form error messages not displaying properly
+
+**Solutions Implemented**:
+- ✅ Created `.env` file from `.env.example` with proper configuration
+- ✅ Added CSRF token fields to both login and register forms (`{{ csrf_field()|raw }}`)
+- ✅ Updated AuthController to use modern Request/Response classes
+- ✅ Integrated AuthService with bcrypt password hashing (password_hash/password_verify)
+- ✅ Fixed error message display in templates (passing `error` and `msg` parameters)
+- ✅ Cleared existing users with plain-text passwords from database
+- ✅ Added success message display on login page after registration
+
+**Technical Changes**:
+```php
+// Before (Insecure)
+if ($user && $password == $user['password']) { ... }
+
+// After (Secure)
+$result = $this->authService->login($email, $password);
+// Uses password_verify() internally with bcrypt
+```
+
+**Files Modified**:
+- `src/Controllers/AuthController.php` - Refactored to use DI, Request/Response, AuthService
+- `templates/auth/login.html.twig` - Added CSRF token and error/success message display
+- `templates/auth/register.html.twig` - Added CSRF token and error message display
+- `.env` - Created from example with SQLite configuration
+
+#### 2. **Created .gitignore**
+**Purpose**: Prevent committing vendor directory and sensitive files to Git repository.
+
+**Contents**:
+- `/vendor/` - Composer dependencies (can be rebuilt with `composer install`)
+- `.env` files - Environment configuration with sensitive data
+- `/storage/logs/*.log` - Application logs
+- `/public/uploads/*` - User-uploaded files
+- IDE files (.vscode, .idea)
+- Cache and temporary files
+
+---
+
+### Previous Audit Log
+
 1. Setting Up Project Dependencies
 Installing Composer dependencies and setting up the development environment for the SellNow project.
 
@@ -229,14 +292,18 @@ $result = $productService->createProduct($data, $files, $userId);
 #### 1. **Authentication Flow**
 ```bash
 # Start server
-php -S localhost:8000 -t public
+php -S localhost:8001 -t public
 
 # Test registration
-1. Navigate to http://localhost:8000/register
-2. Register with: email, username, full_name, password
+1. Navigate to http://localhost:8001/register
+2. Register with: email, username, full_name, password (min 6 chars)
 3. Verify password is hashed in database (not plain text)
-4. Login with credentials
-5. Verify session is created
+4. Login with credentials at http://localhost:8001/login
+5. Verify session is created and redirected to dashboard
+
+# Test with existing user
+Email: hello@app.com
+Password: 12345678
 ```
 
 #### 2. **Security Testing**

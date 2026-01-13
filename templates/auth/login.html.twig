@@ -7,15 +7,16 @@
     <div class="col-md-6">
         <h2>Login</h2>
         
-        <!-- Imperfect: using GET param directly -->
-        {% if get_error is defined %} 
-             <!-- This won't work because I didn't pass it from controller properly yet, 
-                  I passed it via URL param but didn't extract it to twig context.
-                  Candidates should spot this. -->
-             <div class="alert alert-danger">{{ get_error }}</div>
+        {% if error %}
+             <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        
+        {% if msg %}
+             <div class="alert alert-success">{{ msg }}</div>
         {% endif %}
 
         <form action="/login" method="POST">
+            {{ csrf_field()|raw }}
             <div class="mb-3">
                 <label>Email</label>
                 <input type="email" name="email" class="form-control" required>

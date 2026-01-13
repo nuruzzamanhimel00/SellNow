@@ -2,15 +2,33 @@
 
 namespace SellNow\Controllers;
 
+use Twig\Environment;
+use SellNow\Database\Connection;
+use SellNow\Core\Request;
+use SellNow\Core\Response;
+use PDO;
+
 class PublicController
 {
-    private $twig;
-    private $db;
+    private Environment $twig;
+    private PDO $db;
 
-    public function __construct($twig, $db)
+    public function __construct(Environment $twig, Connection $connection)
     {
         $this->twig = $twig;
-        $this->db = $db;
+        $this->db = $connection->getPdo();
+    }
+
+    public function home(Request $request): Response
+    {
+        $content = $this->twig->render('layouts/base.html.twig', [
+            'content' => '<h1>Welcome to SellNow</h1>
+                          <p>A platform for selling digital products.</p>
+                          <a href="/login" class="btn btn-primary">Login</a>
+                          <a href="/register" class="btn btn-success">Register</a>'
+        ]);
+        
+        return Response::make($content);
     }
 
     public function profile($username)

@@ -2,15 +2,19 @@
 
 namespace SellNow\Controllers;
 
+use Twig\Environment;
+use SellNow\Database\Connection;
+use PDO;
+
 class CartController
 {
-    private $twig;
-    private $db;
+    private Environment $twig;
+    private PDO $db;
 
-    public function __construct($twig, $db)
+    public function __construct(Environment $twig, Connection $connection)
     {
         $this->twig = $twig;
-        $this->db = $db;
+        $this->db = $connection->getPdo();
     }
 
     public function index()
