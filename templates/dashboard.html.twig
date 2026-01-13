@@ -1,0 +1,40 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<p>Welcome back, {{ username }}!</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">My Products</h5>
+                <p>Manage your digital goods.</p>
+                <a href="/products/add" class="btn btn-primary">Add New Product</a>
+                <!-- List products here later using jQuery or backend loop -->
+                <hr>
+                <ul id="product-list" class="list-group">
+                    <!-- TODO: Fetch products -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Earnings</h5>
+                <p>Not implemented yet.</p>
+            </div>
+        </div>
+    </div>
+     <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Your Public Page</h5>
+                <!-- Inconsistent: hardcoded link structure -->
+                <a href="/{{ username }}" target="_blank" class="btn btn-outline-info">View Shop</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

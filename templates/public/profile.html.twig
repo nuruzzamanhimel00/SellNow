@@ -1,0 +1,61 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}{{ seller.username }}'s Shop{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1>{{ seller.Full_Name }} <small class="text-muted">(@{{ seller.username }})</small></h1>
+    <p>Welcome to my shop.</p>
+</div>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if product.image_path %}
+            <img src="/{{ product.image_path }}" class="card-img-top" alt="...">
+            {% else %}
+            <div class="bg-secondary text-white card-img-top p-5 text-center">No Image</div>
+            {% endif %}
+            
+            <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">${{ product.price }}</p>
+                <button class="btn btn-success add-to-cart" 
+                        data-id="{{ product.product_id }}" 
+                        data-title="{{ product.title }}"
+                        data-price="{{ product.price }}">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No products found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // jQuery for Add to Cart intentionally mixed in template
+    $(document).ready(function() {
+        $('.add-to-cart').click(function() {
+            var btn = $(this);
+            var id = btn.data('id');
+            // Imperfection: No AJAX endpoint properly defined yet, will implement next
+            $.post('/cart/add', {
+                product_id: id,
+                quantity: 1
+            }, function(response) {
+                alert("Added to cart!");
+                // refresh page is ugly but works
+                location.reload();
+            }).fail(function() {
+                alert("Failed to add to cart"); 
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{
+    "name": "sellnow/assessment",
+    "description": "A partially complete, imperfect platform for selling digital products.",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "twig/twig": "^3.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "SellNow\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "JoulesLabs - Tech Team",
+            "email": "developer@jouleslabs.com"
+        }
+    ]
+}

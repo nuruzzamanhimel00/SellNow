@@ -1,0 +1,39 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block content %}
+<h1>Checkout</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <h4>Billing Details</h4>
+        <form action="/checkout/process" method="POST" id="checkout-form">
+            <div class="mb-3">
+                <label>Full Name</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            
+            <h4>Payment Method</h4>
+            <div class="mb-3">
+                {% for provider in providers %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="provider" value="{{ provider }}" id="prov_{{ loop.index }}" required>
+                    <label class="form-check-label" for="prov_{{ loop.index }}">
+                        {{ provider }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg">Pay ${{ total }}</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5>Order Summary</h5>
+                <h3>${{ total }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

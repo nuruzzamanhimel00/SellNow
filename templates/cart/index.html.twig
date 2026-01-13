@@ -1,0 +1,56 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block content %}
+<h1>Your Cart</h1>
+
+{% if cart is empty %}
+    <p>Your cart is empty.</p>
+    <a href="/" class="btn btn-primary">Continue Shopping</a>
+{% else %}
+    <a href="/cart/clear" class="btn btn-sm btn-danger float-end">Clear Cart</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price * item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td><strong>${{ total }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Coupon Code">
+        <button class="btn btn-outline-secondary" type="button" id="apply-coupon">Apply</button>
+    </div>
+
+    <div class="text-end">
+        <a href="/checkout" class="btn btn-success btn-lg">Proceed to Checkout</a>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#apply-coupon').click(function() {
+        // Imperfect: Coupon logic entirely client side visual for now
+        alert("Coupon system currently down for maintenance (Mock)");
+    });
+</script>
+{% endblock %}

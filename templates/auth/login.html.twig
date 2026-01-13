@@ -1,0 +1,31 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}Login - SellNow{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>Login</h2>
+        
+        <!-- Imperfect: using GET param directly -->
+        {% if get_error is defined %} 
+             <!-- This won't work because I didn't pass it from controller properly yet, 
+                  I passed it via URL param but didn't extract it to twig context.
+                  Candidates should spot this. -->
+             <div class="alert alert-danger">{{ get_error }}</div>
+        {% endif %}
+
+        <form action="/login" method="POST">
+            <div class="mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
