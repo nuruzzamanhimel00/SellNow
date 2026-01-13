@@ -53,3 +53,12 @@ Installing Composer dependencies and setting up the development environment for 
 3. Need to add success.html.twig for after completing success.html.twig
 
 4. schema.sql file's schema updated 
+
+5.
+   - Creating environment configuration and bootstrap files
+   - Creating Router, Request, and Response classes
+   - Creating security components (Password Hasher, CSRF Token, File Upload Validator)
+   - Creating database layer with Connection, QueryBuilder, and Repository pattern
+   - Creating Validation layer and Service layer (AuthService, ProductService)
+   - Creating Payment Gateway abstraction and refactoring controllers
+   - Creating service configuration, routes, and refactoring controllers
