@@ -494,6 +494,7 @@ Step 5: we need to restart server
    - ✅ php -S localhost:8000 -t public
 ## 👨‍💻 Author
 
-Refactored with ❤️ to demonstrate mastery of software engineering principles.
+Refactored with ❤️ Md Nuruzzaman
+linkedin url: https://www.linkedin.com/in/md-nuruzzaman-bb2027169/ 
 
 **Philosophy**: Code is read more than it's written. Make it count.
