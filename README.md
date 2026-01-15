@@ -11,7 +11,7 @@ SellNow is a small marketplace where:
 
 1. Users can register and get a public profile at `/username`
 2. Users can upload digital products (image + file)
-3. Buyers can browse products CRUD 
+3. Buyers can browse products CRUD ,  Update profile information
 
 ---
 
