@@ -211,6 +211,61 @@ After the fix, the product creation flow works as follows:
 6. Request reaches `ProductController::store()`
 7. Product is created and user is redirected to dashboard
 
+#### 4. **Implemented Product Management (CRUD Operations)**
+**Features Added**: Complete product management system with list, edit, update, and delete functionality.
+
+**What Was Implemented**:
+
+1. **Product List Page** (`GET /products`)
+   - Displays all products for logged-in user in a table format
+   - Shows product image, title, price, status (active/inactive), and creation date
+   - Includes quick action buttons (Edit/Delete) for each product
+   - Empty state message when no products exist
+   - Link to add new product
+
+2. **Product Edit Page** (`GET /products/edit?id={id}`)
+   - Pre-filled form with existing product data
+   - Shows current image and file with option to replace
+   - Ownership verification (users can only edit their own products)
+   - Cancel button to return to product list
+
+3. **Product Update** (`POST /products/update`)
+   - Updates product title, description, price
+   - Handles optional image/file replacement
+   - Deletes old files when new ones are uploaded
+   - CSRF protection enabled
+   - Ownership verification before update
+
+4. **Product Delete** (`POST /products/delete`)
+   - Deletes product from database
+   - Removes associated image and file from server
+   - JavaScript confirmation dialog before deletion
+   - CSRF protection enabled
+   - Ownership verification before deletion
+
+**Security Features**:
+- ✅ Ownership verification on all operations (users can only manage their own products)
+- ✅ CSRF token validation on all POST requests
+- ✅ Authentication required for all product routes
+- ✅ Prepared statements to prevent SQL injection
+- ✅ File cleanup when updating/deleting to prevent server storage bloat
+
+**Files Created**:
+- `templates/products/index.html.twig` - Product list page with table view
+- `templates/products/edit.html.twig` - Product edit form
+
+**Files Modified**:
+- `src/Controllers/ProductController.php` - Added index(), edit(), update(), delete() methods
+- `config/routes.php` - Added routes for /products, /products/edit, /products/update, /products/delete
+- `templates/dashboard.html.twig` - Added "View All Products" button
+
+**User Flow**:
+1. User logs in → Dashboard
+2. Clicks "View All Products" → Product list page
+3. Clicks "Edit" on a product → Edit form with pre-filled data
+4. Updates product and submits → Product updated, redirected to list
+5. OR clicks "Delete" → Confirmation → Product deleted with files removed
+
 ---
 
 ### Previous Audit Log

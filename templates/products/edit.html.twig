@@ -1,0 +1,48 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block content %}
+<h2>Edit Product</h2>
+<form action="/products/update" method="POST" enctype="multipart/form-data">
+    {{ csrf_field()|raw }}
+    <input type="hidden" name="product_id" value="{{ product.product_id }}">
+    
+    <div class="mb-3">
+        <label>Title</label>
+        <input type="text" name="title" class="form-control" value="{{ product.title }}" required>
+    </div>
+    
+    <div class="mb-3">
+        <label>Description (Optional)</label>
+        <textarea name="description" class="form-control" rows="4">{{ product.description }}</textarea>
+    </div>
+    
+    <div class="mb-3">
+        <label>Price ($)</label>
+        <input type="number" step="0.01" name="price" class="form-control" value="{{ product.price }}" required>
+    </div>
+    
+    <div class="mb-3">
+        <label>Cover Image</label>
+        {% if product.image_path %}
+            <div class="mb-2">
+                <img src="/{{ product.image_path }}" alt="{{ product.title }}" style="max-width: 200px; height: auto;">
+                <p class="text-muted small">Current image (upload new to replace)</p>
+            </div>
+        {% endif %}
+        <input type="file" name="image" class="form-control" accept="image/*">
+    </div>
+    
+    <div class="mb-3">
+        <label>Product File (content to sell)</label>
+        {% if product.file_path %}
+            <p class="text-muted small">Current file: {{ product.file_path }} (upload new to replace)</p>
+        {% endif %}
+        <input type="file" name="product_file" class="form-control">
+    </div>
+    
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Update Product</button>
+        <a href="/products" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

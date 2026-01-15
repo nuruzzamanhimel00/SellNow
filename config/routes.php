@@ -31,8 +31,12 @@ $router->get('/logout', [AuthController::class, 'logout']);
 $router->get('/dashboard', [AuthController::class, 'dashboard'], [AuthMiddleware::class]);
 
 // Product Routes
+$router->get('/products', [ProductController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/products/add', [ProductController::class, 'create'], [AuthMiddleware::class]);
 $router->post('/products/add', [ProductController::class, 'store'], [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/products/edit', [ProductController::class, 'edit'], [AuthMiddleware::class]);
+$router->post('/products/update', [ProductController::class, 'update'], [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/products/delete', [ProductController::class, 'delete'], [AuthMiddleware::class, CsrfMiddleware::class]);
 
 // Cart Routes
 $router->get('/cart', [CartController::class, 'index']);
