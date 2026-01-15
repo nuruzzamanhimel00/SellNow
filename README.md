@@ -11,7 +11,7 @@ SellNow is a small marketplace where:
 
 1. Users can register and get a public profile at `/username`
 2. Users can upload digital products (image + file)
-3. Buyers can browse products, add to cart, and checkout
+3. Buyers can browse products CRUD 
 
 ---
 
@@ -165,7 +165,44 @@ Modified:
 * `dashboard.html.twig`
 
 ---
+### 5. User Profile Update
 
+**Features**:
+
+* Edit profile at `/profile/edit`
+* Update: email, username, full name
+* Change password (optional)
+* Link to view public profile
+
+**Security**:
+
+* Current password required for password change
+* Email/username uniqueness check
+* CSRF protection
+* Password confirmation validation
+* Bcrypt hashing
+* Min 6 chars for password
+
+**Validation**:
+
+* Email: Required, valid format
+* Username: 3-50 chars, alphanumeric
+* Full Name: 2-100 chars
+* Passwords must match
+
+**Files Created**:
+
+* `auth/profile-edit.html.twig`
+
+**Files Modified**:
+
+* `AuthController.php` - editProfile(), updateProfile()
+* `AuthService.php` - getUserById(), updateProfile()
+* `routes.php` - /profile/edit, /profile/update
+* `dashboard.html.twig` - Edit Profile button
+* `base.html.twig` - My Profile nav link
+
+---
 ## 🏗 Architecture
 
 ```
@@ -238,15 +275,13 @@ src/Payment
 * Edit product
 * Delete product
 
-### Cart
+### Profile
 
-* Add to cart
-* Checkout
-* Order created
+* Update profile information
+* Change password
+* View public profile
 
 ---
-
-## 🧠 What Makes This Special
 
 * Framework-like system without framework
 * Security-first mindset

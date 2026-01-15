@@ -106,4 +106,62 @@ class AuthController
         
         return Response::make($content);
     }
+
+    public function editProfile(Request $request): Response
+    {
+        if (!isset($_SESSION['user_id'])) {
+            return Response::redirect('/login');
+        }
+
+        // Get current user data
+        $user = $this->authService->getUserById($_SESSION['user_id']);
+
+        if (!$user) {
+            return Response::redirect('/login');
+        }
+
+        $content = $this->twig->render('auth/profile-edit.html.twig', [
+            'user' => $user,
+            'msg' => $request->query('msg'),
+            'error' => $request->query('error')
+        ]);
+        
+        return Response::make($content);
+    }
+
+    public function updateProfile(Request $request): Response
+    {
+        if (!isset($_SESSION['user_id'])) {
+            return Response::redirect('/login');
+        }
+
+        $data = [
+            'id' => $_SESSION['user_id'],
+            'email' => $request->post('email'),
+            'username' => $request->post('username'),
+            'full_name' => $request->post('full_name'),
+            'current_password' => $request->post('current_password'),
+            'new_password' => $request->post('new_password'),
+            'confirm_password' => $request->post('confirm_password')
+        ];
+
+        $result = $this->authService->updateProfile($data);
+
+        if ($result['success']) {
+            // Update session if username changed
+            if (isset($result['user']['username'])) {
+                $_SESSION['username'] = $result['user']['username'];
+            }
+            return Response::redirect('/profile/edit?msg=' . urlencode('Profile updated successfully!'));
+        }
+
+        // Show errors
+        $errors = $result['errors'];
+        $errorMessage = '';
+        foreach ($errors as $field => $fieldErrors) {
+            $errorMessage .= implode(', ', $fieldErrors) . ' ';
+        }
+
+        return Response::redirect('/profile/edit?error=' . urlencode(trim($errorMessage)));
+    }
 }

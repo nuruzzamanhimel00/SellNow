@@ -30,6 +30,10 @@ $router->get('/logout', [AuthController::class, 'logout']);
 // Protected Routes (Require Authentication)
 $router->get('/dashboard', [AuthController::class, 'dashboard'], [AuthMiddleware::class]);
 
+// Profile Routes
+$router->get('/profile/edit', [AuthController::class, 'editProfile'], [AuthMiddleware::class]);
+$router->post('/profile/update', [AuthController::class, 'updateProfile'], [AuthMiddleware::class, CsrfMiddleware::class]);
+
 // Product Routes
 $router->get('/products', [ProductController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/products/add', [ProductController::class, 'create'], [AuthMiddleware::class]);
