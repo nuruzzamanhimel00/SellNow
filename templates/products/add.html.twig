@@ -3,6 +3,7 @@
 {% block content %}
 <h2>Sell a New Product</h2>
 <form action="/products/add" method="POST" enctype="multipart/form-data">
+    {{ csrf_field()|raw }}
     <div class="mb-3">
         <label>Title</label>
         <input type="text" name="title" class="form-control" required>

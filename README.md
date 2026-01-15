@@ -104,6 +104,113 @@ $result = $this->authService->login($email, $password);
 - IDE files (.vscode, .idea)
 - Cache and temporary files
 
+#### 3. **Fixed CSRF Token Validation Error on Product Add Form**
+**Issue Title**: CSRF Token Validation Failed on POST /products/add
+
+**Problem**: 
+When submitting the "Add Product" form at `http://localhost:8001/products/add`, the application returned a 403 error with the message "CSRF token validation failed".
+
+**Why This Issue Occurred**:
+The issue occurred due to a mismatch between the application's security requirements and the form implementation:
+
+1. **Security Middleware Active**: The route `POST /products/add` was protected with `CsrfMiddleware` (defined in `config/routes.php`)
+2. **Missing CSRF Token in Form**: The form template (`templates/products/add.html.twig`) did not include the CSRF token field
+3. **Middleware Validation Failure**: When the form was submitted, `CsrfMiddleware` checked for `_csrf_token` in POST data, found none, and rejected the request
+4. **CSRF Function Already Available**: The Twig environment had `csrf_field()` function registered (in `config/services.php`), but it wasn't being used in the template
+
+**Root Cause Analysis**:
+```
+Flow of the problem:
+1. User clicks "Add Product" → GET /products/add (shows form)
+2. Form rendered WITHOUT csrf token field
+3. User fills form and submits → POST /products/add
+4. Request passes through middleware stack
+5. CsrfMiddleware::handle() executes
+6. Looks for $_POST['_csrf_token'] → NOT FOUND
+7. Returns Response::make('CSRF token validation failed', 403)
+8. Request never reaches ProductController::store()
+```
+
+**Fix Implementation Steps**:
+
+**Step 1**: Identified the missing CSRF token in the form
+- Opened `templates/products/add.html.twig`
+- Verified that form had no `<input type="hidden" name="_csrf_token">` field
+
+**Step 2**: Checked Twig functions availability
+- Reviewed `config/services.php` to confirm `csrf_field()` function was already registered
+- Confirmed `CsrfToken` class was properly injected into Twig environment
+
+**Step 3**: Added CSRF token field to the form
+- Updated `templates/products/add.html.twig`
+- Added `{{ csrf_field()|raw }}` immediately after the `<form>` opening tag
+- The `|raw` filter is necessary because `csrf_field()` returns HTML markup that should not be escaped
+
+**Step 4**: Verified the fix
+- The form now includes: `<input type="hidden" name="_csrf_token" value="[64-character token]">`
+- When submitted, `CsrfMiddleware` can validate the token
+- Request successfully reaches `ProductController::store()`
+
+**Code Changes**:
+```twig
+<!-- Before (templates/products/add.html.twig) -->
+<form action="/products/add" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label>Title</label>
+        ...
+    </div>
+</form>
+
+<!-- After (templates/products/add.html.twig) -->
+<form action="/products/add" method="POST" enctype="multipart/form-data">
+    {{ csrf_field()|raw }}
+    <div class="mb-3">
+        <label>Title</label>
+        ...
+    </div>
+</form>
+```
+
+**How CSRF Protection Works in This Application**:
+
+1. **Token Generation**: 
+   - `CsrfToken::generate()` creates a 64-character random token using `random_bytes(32)` and `bin2hex()`
+   - Token is stored in session: `$_SESSION['_csrf_token']`
+
+2. **Token Inclusion**: 
+   - `csrf_field()` Twig function generates hidden input field with current token
+   - Token is embedded in forms that perform state-changing operations
+
+3. **Token Validation**: 
+   - `CsrfMiddleware` intercepts POST/PUT/DELETE requests
+   - Extracts token from `$_POST['_csrf_token']`
+   - Compares with session token using `hash_equals()` (prevents timing attacks)
+   - Returns 403 if validation fails, otherwise allows request to continue
+
+4. **Security Benefit**: 
+   - Prevents attackers from forging requests on behalf of authenticated users
+   - Each user session has unique token
+   - Tokens are unpredictable and validated server-side
+
+**Files Modified**:
+- `templates/products/add.html.twig` - Added CSRF token field to product creation form
+
+**Related Files** (for reference, not modified):
+- `src/Middleware/CsrfMiddleware.php` - CSRF validation logic
+- `src/Security/CsrfToken.php` - Token generation and validation
+- `config/routes.php` - Route definition with CsrfMiddleware
+- `config/services.php` - Twig csrf_field() function registration
+
+**Testing**:
+After the fix, the product creation flow works as follows:
+1. User navigates to `/products/add` (GET request, no CSRF check)
+2. Form is rendered with CSRF token hidden field
+3. User fills form and submits
+4. POST request includes `_csrf_token` parameter
+5. `CsrfMiddleware` validates token successfully
+6. Request reaches `ProductController::store()`
+7. Product is created and user is redirected to dashboard
+
 ---
 
 ### Previous Audit Log
